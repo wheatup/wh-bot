@@ -16,10 +16,10 @@ client.once('ready', () => {
 client.on('message', message => {
 	const { content } = message;
 	const [_, command, args] = regex[Symbol.match](content) || [];
-	if(command) {
-		commands[command]?.(message, args);
-	} else {
-		observe(message);
+	observe(message);
+	if (command) {
+		message.react('👀');
+		(commands[command] ?? commands['default'])(message, args);
 	}
 });
 
