@@ -5,7 +5,11 @@ export const onMessage = async message => {
 	if (author.bot) return;
 
 	let code;
-	if ((code = /^\/\/\s*run\s*\n((?:(?!(\n```))[\s\S])+)/im[Symbol.match](content))) {
+	if (
+		(code = /^\/\/\s*run\s*\n((?:(?!(\n```))[\s\S])+)/im[Symbol.match](content)) ||
+		(code = /(^\s*console\.log\([\s\S]*\)\s*;?\s*)$/im[Symbol.match](content)) ||
+		(code = /```\w*\r?\n\s*(^console\.log\([\s\S]*\);?)\s*\r?\n\s*```$/im[Symbol.match](content))
+	) {
 		message.react('👀');
 		code = code[1];
 		let { result, console } = await javascriptRunner(code);
