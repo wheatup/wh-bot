@@ -3,11 +3,11 @@ export const unknown = (message, args) => {
 };
 
 export const ping = (message, args) => {
-	message.channel.send(`Pong ${args}`);
+	message.reply(`Pong ${args}`);
 };
 
 export const debug = (message, args) => {
-	message.channel.send(`\`\`\`json\n${JSON.stringify(message, null, 2)}\n\`\`\``);
+	message.reply(`\`\`\`json\n${JSON.stringify(message, null, 2)}\n\`\`\``);
 };
 
 export default {

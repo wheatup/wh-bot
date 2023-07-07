@@ -14,15 +14,15 @@ export const onMessage = async message => {
 			if (!console || !console.length) {
 				res = `\`\`\`\n${result.substr(0, 3900)}\n\`\`\``;
 			} else {
-				res = `**结果**\n\`\`\`\n${result.substr(0, 1800)}\n\`\`\`\n**控制台**\n\`\`\`\n${console.join('\n').substr(0, 1800)}\n\`\`\``;
+				res = `**结果**\n\`\`\`\n${result.substr(0, 1800)}\n\`\`\`\n**控制台**\n\`\`\`fix\n${console.join('\n').substr(0, 1800)}\n\`\`\``;
 			}
 		} else if (console && console.length) {
-			res = `\`\`\`\n${console.join('\n').substr(0, 3900)}\n\`\`\``;
+			res = `\`\`\`fix\n${console.join('\n').substr(0, 3900)}\n\`\`\``;
 		}
 		try {
-			message.channel.send(res);
+			message.reply(res);
 		} catch (ex) {
-			message.channel.send('```\n' + ex.content + '\n```' || '');
+			message.reply('```fix\n' + ex.content + '\n```' || '');
 		}
 	}
 };
