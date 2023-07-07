@@ -1,14 +1,13 @@
-const saferEval = require('safer-eval')
-module.exports = function(code) {
-	try {
-		'use strict';
-		const result = saferEval(code);
-		if(typeof result === 'object') {
-			return JSON.stringify(result, null, 2);
-		} else {
-			return result;
+import Sandbox from 'sandbox';
+const sb = new Sandbox();
+export default function (code) {
+	return new Promise(res => {
+		try {
+			sb.run(code, data => {
+				res(data);
+			});
+		} catch (ex) {
+			res(ex.message);
 		}
-	} catch(ex) {
-		return ex.message;
-	}
-};
+	});
+}

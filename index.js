@@ -1,9 +1,9 @@
-const dotenv = require('dotenv');
-const Discord = require('discord.js');
+import dotenv from 'dotenv';
+import Discord from 'discord.js';
 const client = new Discord.Client();
-const { prefix } = require('./config.json');
-const commands = require('./commands');
-const observe = require('./observe');
+import commands from './commands.js';
+import observe from './observe.js';
+const prefix = '!';
 
 dotenv.config();
 
@@ -19,8 +19,9 @@ client.on('message', message => {
 	observe(message);
 	if (command) {
 		message.react('👀');
-		(commands[command] ?? commands['default'])(message, args);
+		(commands[command] ?? commands['unknown'])(message, args);
 	}
 });
 
+console.log('LOGIN WITH TOKEN', process.env.TOKEN);
 client.login(process.env.TOKEN);

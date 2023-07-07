@@ -1,18 +1,30 @@
-const javascriptRunner = require('./javascriptRunner');
+import javascriptRunner from './javascriptRunner.js';
 
-const onMessage = message => {
+export const onMessage = async message => {
 	const { author, content } = message;
 	if (author.bot) return;
 
-	console.log(message);
-
 	let code;
-	if(code = /^```javascript\n([\s\S]*)\n```$/i[Symbol.match](content)) {
+	if ((code = /^\/\/\s*run\s*\n((?:(?!(\n```))[\s\S])+)/im[Symbol.match](content))) {
 		message.react('👀');
 		code = code[1];
-		const result = javascriptRunner(code);
-		message.channel.send(`\`\`\`\n${result}\n\`\`\``);
+		let { result, console } = await javascriptRunner(code);
+		let res = '';
+		if (result && !['undefined', 'null', undefined, null].includes(result)) {
+			if (!console || !console.length) {
+				res = `\`\`\`\n${result.substr(0, 3900)}\n\`\`\``;
+			} else {
+				res = `**结果**\n\`\`\`\n${result.substr(0, 1800)}\n\`\`\`\n**控制台**\n\`\`\`\n${console.join('\n').substr(0, 1800)}\n\`\`\``;
+			}
+		} else if (console && console.length) {
+			res = `\`\`\`\n${console.join('\n').substr(0, 3900)}\n\`\`\``;
+		}
+		try {
+			message.channel.send(res);
+		} catch (ex) {
+			message.channel.send('```\n' + ex.content + '\n```' || '');
+		}
 	}
 };
 
-module.exports = onMessage;
+export default onMessage;
